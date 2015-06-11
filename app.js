@@ -1,8 +1,9 @@
-var nothing = "Excellent"
+var search = prompt("Type anything to explore live tweets", "Enter the Matrix");
 
-function testRun(){
-	socket.emit('test', nothing);
-};
+
+if (search != null) {
+	socket.emit('test', search);
+}
 
 socket.on('tweets', function(tweets){
 	var newTweet = document.createElement('DIV');
