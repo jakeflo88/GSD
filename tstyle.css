@@ -1,0 +1,10 @@
+/* Styles for twitter matrix */
+
+.myColumns {
+	background-color: black;
+	color: #00FF00;
+
+	text-align: center;
+	font-size: 2em;
+	font-weight: bold;
+}
