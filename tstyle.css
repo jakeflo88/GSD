@@ -16,7 +16,7 @@ body {
 	font-size: 2em;
 	font-weight: bold;
 
-	bottom: 0;
+	vertical-align: text-bottom;
 
 	height: 1000px;
 	
