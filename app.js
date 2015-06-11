@@ -15,9 +15,6 @@ var colActive = 0;
 //listen for twitter response and post data
 socket.on('tweets', function(tweets){
 
-	//add breaker to separate tweets
-	tweets += " *** ";
-
 	//check if column is even or odd
 	if (colActive % 2 == 0) {
 	
