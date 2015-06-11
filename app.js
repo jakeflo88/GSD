@@ -59,6 +59,7 @@ socket.on('tweets', function(tweets){
 		}, 250);
 	}
 
+	//for every other column
 	else {
 		//makeshift loop that I can control
 		var i = 0;
@@ -88,13 +89,16 @@ socket.on('tweets', function(tweets){
 			poster2.appendChild(document.createTextNode(charSelect2));
 			poster2.appendChild(stacker2);
 
+			//stacking in opposite way
+			//this may not be working the way I want
+			//it's too hard to tell with the skewed data right now
 			var columnDown = document.getElementById(columns[colActive]);
 			columnDown.insertBefore(poster2, columnDown.childNodes[0]);
 
 			//advance the loop
 			i++;
 
-			//autoscroll
+			//autoscroll in reverse
 			var tracker2 = document.getElementById(columns[colActive]);
 			tracker2.scrollTop = !tracker.scrollHeight;
 
