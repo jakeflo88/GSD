@@ -9,13 +9,27 @@ if (search != null) {
 //listen for twitter response and post data
 socket.on('tweets', function(tweets){
 	
+	var i = 0;
 
-//Basic display
-/*
-	var newTweet = document.createElement('DIV');
+	var timer = setInterval(function(){
 
-	newTweet.appendChild(document.createTextNode(tweets));
+		if (i >= tweets.length) {
+			clearInterval(timer);
+		};
 
-	document.getElementById('landing').appendChild(newTweet);
-*/
+		var charSelect = tweets.substring(i, (i + 1));
+
+		var poster = document.createElement('DIV');
+		var stacker = document.createElement('BR')
+
+		poster.appendChild(document.createTextNode(charSelect));
+		poster.appendChild(stacker);
+
+		document.getElementById('a').appendChild(poster);
+
+		i++;
+
+
+	}, 500);
+
 });

@@ -33,6 +33,7 @@ io.on('connection', function(socket){
 			stream.on('data', function(data){
 				console.log(data.text);
 				socket.emit('tweets', data.text);
+				stream.destroy();
 			});
 
 		}); 
