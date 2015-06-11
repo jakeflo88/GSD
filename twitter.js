@@ -4,16 +4,6 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
-
-io.on('connection', function(socket){
- 
-  console.log("connection");
-});
-
-
 var twit = require('twitter'),
 	twitter = new twit({
 		consumer_key: 'RPFqdVUwMX8stpdBRx8BmaoVv',
@@ -25,17 +15,29 @@ var twit = require('twitter'),
 var count = 0;
 	util = require('util');
 
-/*twitter.stream('statuses/filter', {track: 'love'}, function(stream){
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
-	stream.on('error', function(error){
-		throw error;
+io.on('connection', function(socket){
+ 
+  console.log("connection");
+
+  	socket.on('test', function(nothing){
+		twitter.stream('statuses/filter', {track: nothing}, function(stream){
+
+			stream.on('error', function(error){
+				throw error;
+			});
+
+			stream.on('data', function(data){
+				console.log(data.text);
+				socket.emit('tweets', data.text);
+			});
+
+		}); 
 	});
-
-	stream.on('data', function(data){
-		console.log(data.text);
-	});
-
-}); */
+});
 
 
 app.use(express.static(__dirname));
