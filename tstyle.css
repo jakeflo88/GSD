@@ -1,5 +1,13 @@
 /* Styles for twitter matrix */
 
+body {
+	min-height: 100%;
+
+	padding: 0;
+	margin: 0;
+	bottom: 0;
+}
+
 .myColumns {
 	background-color: black;
 	color: #00FF00;
@@ -7,4 +15,10 @@
 	text-align: center;
 	font-size: 2em;
 	font-weight: bold;
+
+	bottom: 0;
+
+	height: 1000px;
+	
+	overflow: auto;
 }
