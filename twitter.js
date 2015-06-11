@@ -1,3 +1,19 @@
+var express = require('express');
+var app = express();
+
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
+
+io.on('connection', function(socket){
+ 
+  console.log("connection");
+});
+
+
 var twit = require('twitter'),
 	twitter = new twit({
 		consumer_key: 'RPFqdVUwMX8stpdBRx8BmaoVv',
@@ -9,7 +25,7 @@ var twit = require('twitter'),
 var count = 0;
 	util = require('util');
 
-twitter.stream('statuses/filter', {track: 'love'}, function(stream){
+/*twitter.stream('statuses/filter', {track: 'love'}, function(stream){
 
 	stream.on('error', function(error){
 		throw error;
@@ -17,10 +33,15 @@ twitter.stream('statuses/filter', {track: 'love'}, function(stream){
 
 	stream.on('data', function(data){
 		console.log(data.text);
-
-
 	});
 
+}); */
+
+
+app.use(express.static(__dirname));
+
+http.listen(3000, function(){
+  console.log('listening on *:3000');
 });
 
 
