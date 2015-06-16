@@ -1,9 +1,12 @@
 //prompt to enter what you want to search
 var search = prompt("Search anything and stream live tweets", "Enter the Matrix");
 
+//to start the first column
+var first = true;
+
 //search data emit
 if (search != null) {
-	socket.emit('test', search);
+	socket.emit('test', search, first);
 }
 
 
@@ -37,6 +40,7 @@ socket.on('tweets', function(tweets){
 			//when it comes to the last char of the tweet it stops
 			if (i >= tweets.length) {
 				clearInterval(timer);
+				socket.emit('nextCol');
 			};
 
 			//grab the chars one at a time from the tweet
@@ -72,6 +76,7 @@ socket.on('tweets', function(tweets){
 			//when it comes to the last char of the tweet it stops
 			if (i >= tweets.length) {
 				clearInterval(timer);
+				socket.emit('nextCol');
 			};
 
 			//grab the chars one at a time from the tweet
@@ -85,8 +90,6 @@ socket.on('tweets', function(tweets){
 			poster2.appendChild(stacker2);
 
 			//stacking in opposite way
-			//this may not be working the way I want
-			//it's too hard to tell with the skewed data right now
 			var columnDown = document.getElementById(columns[colSelect]);
 			columnDown.insertBefore(poster2, columnDown.childNodes[0]);
 

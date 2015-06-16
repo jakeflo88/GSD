@@ -12,8 +12,10 @@ var twit = require('twitter'),
 		access_token_secret: 've79nUIkLp52jX08DdsSi1t9O1OEJ2VEWwQyNyy7WcwCp'
 	});
 
-var count = 0;
-	util = require('util');
+var count = 0,
+	util = require('util'),
+	tweetHandler = [];
+
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -23,7 +25,7 @@ io.on('connection', function(socket){
  
   console.log("connection");
 
-  	socket.on('test', function(nothing){
+  	socket.on('test', function(nothing, first){
 		twitter.stream('statuses/filter', {track: nothing}, function(stream){
 
 			stream.on('error', function(error){
@@ -32,12 +34,28 @@ io.on('connection', function(socket){
 
 			stream.on('data', function(data){
 				console.log(data.text);
-				socket.emit('tweets', data.text + " *** ");
+
+				tweetHandler.push(data.text);
+
+				if (first && tweetHandler[0]) {
+					socket.emit('tweets', tweetHandler[0] + " *** ");
+
+					tweetHandler.splice(0, 1);
+					first = !first;
+				}
 			});
 
 		}); 
 	});
+
+	socket.on('nextCol', function(first) {
+	
+		socket.emit('tweets', tweetHandler[0] + " *** ");
+
+		tweetHandler.splice(0, 1);
+	});
 });
+
 
 
 app.use(express.static(__dirname));
