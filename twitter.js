@@ -65,9 +65,9 @@ io.on('connection', function(socket){
   	//after the first tweet is finished displaying, move to the next column
   	//this is triggered at the end of the interval set for displaying tweets
 
-  	//problem is that once it will wait for the first column to finish
+  	//PROBLEM is that it will wait one time for the first column to finish
   	//but the rest of the columns begin one after another after the first
-  	//character rather than the last.
+  	//character is displayed rather than the last.
   	//This causes the columns to run out of control
 
   	//listening for the end of the previous column
