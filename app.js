@@ -18,13 +18,17 @@ var colActive = 0;
 //listen for twitter response and post data
 socket.on('tweets', function(tweets){
 
+	//keep track of which column is active
 	var colSelect = colActive;
 
 	console.log(tweets);
 
+	//advance the column to next
 	if (colActive <= 11) {
 		colActive++;
 	}
+
+	//when it gets to the last column, jump back to the first
 	if (colActive >= 12) {
 		colActive = 0;
 	}
@@ -66,7 +70,8 @@ socket.on('tweets', function(tweets){
 		}, 250);
 	}
 
-	//for every other column
+	//for every other column, same as above, but posts characters in reverse order
+	//the idea is that every other column displays in opposite direction
 	else {
 		//makeshift loop that I can control
 		var i = 0;
@@ -89,7 +94,7 @@ socket.on('tweets', function(tweets){
 			poster2.appendChild(document.createTextNode(charSelect2));
 			poster2.appendChild(stacker2);
 
-			//stacking in opposite way
+			//stacking in opposite direction
 			var columnDown = document.getElementById(columns[colSelect]);
 			columnDown.insertBefore(poster2, columnDown.childNodes[0]);
 

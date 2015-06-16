@@ -25,22 +25,36 @@ io.on('connection', function(socket){
  
   console.log("connection");
 
+  	//receive the search data entered by user
   	socket.on('test', function(nothing, first){
+
+  		//track tweets containing user iput
 		twitter.stream('statuses/filter', {track: nothing}, function(stream){
 
+			//error check on stream
 			stream.on('error', function(error){
 				throw error;
 			});
 
+			//stream of data from twitter api
 			stream.on('data', function(data){
+
+				//check stream in console
 				console.log(data.text);
 
+				//push tweets to an array
 				tweetHandler.push(data.text);
 
+				//to begin displaying the tweets
 				if (first && tweetHandler[0]) {
+
+					//get the first tweet from the array
 					socket.emit('tweets', tweetHandler[0] + " *** ");
 
+					//remove said tweet from the array
 					tweetHandler.splice(0, 1);
+
+					//since this is only needed for the first tweet
 					first = !first;
 				}
 			});
@@ -48,10 +62,21 @@ io.on('connection', function(socket){
 		}); 
 	});
 
+  	//after the first tweet is finished displaying, move to the next column
+  	//this is triggered at the end of the interval set for displaying tweets
+
+  	//problem is that once it will wait for the first column to finish
+  	//but the rest of the columns begin one after another after the first
+  	//character rather than the last.
+  	//This causes the columns to run out of control
+
+  	//listening for the end of the previous column
 	socket.on('nextCol', function(first) {
 	
+		//send the next tweet from the array
 		socket.emit('tweets', tweetHandler[0] + " *** ");
 
+		//then remove it
 		tweetHandler.splice(0, 1);
 	});
 });
