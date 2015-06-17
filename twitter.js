@@ -14,7 +14,9 @@ var twit = require('twitter'),
 
 var count = 0,
 	util = require('util'),
-	tweetHandler = [];
+	tweetHandler = [],
+	gate = [];
+
 
 
 app.get('/', function(req, res){
@@ -26,10 +28,16 @@ io.on('connection', function(socket){
   console.log("connection");
 
   	//receive the search data entered by user
-  	socket.on('test', function(nothing, first){
+  	socket.on('test', function(nothing, starter, first){
+
+  		count++;
+  		gate[starter] = first;
+  		console.log("********Hi Friend!");
 
   		//track tweets containing user iput
 		twitter.stream('statuses/filter', {track: nothing}, function(stream){
+
+			console.log("********Get Up!")
 
 			//error check on stream
 			stream.on('error', function(error){
@@ -39,6 +47,8 @@ io.on('connection', function(socket){
 			//stream of data from twitter api
 			stream.on('data', function(data){
 
+				console.log("********GET THE FUCK UP!");
+
 				//check stream in console
 				console.log(data.text);
 
@@ -46,7 +56,7 @@ io.on('connection', function(socket){
 				tweetHandler.push(data.text);
 
 				//to begin displaying the tweets
-				if (first && tweetHandler[0]) {
+				if (gate[starter] && tweetHandler[0]) {
 
 					//get the first tweet from the array
 					socket.emit('tweets', tweetHandler[0] + " *** ");
@@ -54,32 +64,39 @@ io.on('connection', function(socket){
 					//remove said tweet from the array
 					tweetHandler.splice(0, 1);
 
-					//since this is only needed for the first tweet
-					first = !first;
+					gate[starter] = !first;
+					console.log("********Close the gate");
 				}
 			});
 
 		}); 
 	});
 
-  	//after the first tweet is finished displaying, move to the next column
-  	//this is triggered at the end of the interval set for displaying tweets
 
-  	//PROBLEM is that it will wait one time for the first column to finish
-  	//but the rest of the columns begin one after another after the first
-  	//character is displayed rather than the last.
-  	//This causes the columns to run out of control
+  	//doesn't work right yet, but closer than before
+	socket.on('nextCol', function(column, second) {
 
-  	//listening for the end of the previous column
-	socket.on('nextCol', function(first) {
-	
-		//send the next tweet from the array
-		socket.emit('tweets', tweetHandler[0] + " *** ");
+		count++;
+		gate[column - 1] = second;
 
-		//then remove it
-		tweetHandler.splice(0, 1);
+		if (count > 0) {
+			gate[column] = second;
+		
+			if (gate[column] && tweetHandler[0]) {	
+
+				//send the next tweet from the array
+				socket.emit('tweets', tweetHandler[0] + " *** ");
+
+				//then remove it
+				tweetHandler.splice(0, 1);
+
+				gate[column] = !second;
+			}
+		}
 	});
+
 });
+
 
 
 
