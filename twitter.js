@@ -30,7 +30,7 @@ io.on('connection', function(socket){
   	//receive the search data entered by user
   	socket.on('test', function(nothing, starter, first){
 
-  		count++;
+
   		gate[starter] = first;
   		console.log("********Hi Friend!");
 
@@ -56,7 +56,7 @@ io.on('connection', function(socket){
 				tweetHandler.push(data.text);
 
 				//to begin displaying the tweets
-				if (gate[starter] && tweetHandler[0]) {
+				if (gate[starter] === first && tweetHandler[0]) {
 
 					//get the first tweet from the array
 					socket.emit('tweets', tweetHandler[0] + " *** ");
@@ -74,24 +74,24 @@ io.on('connection', function(socket){
 
 
   	//doesn't work right yet, but closer than before
+  	//maybe not
 	socket.on('nextCol', function(column, second) {
 
-		count++;
-		gate[column - 1] = second;
+		for (i = 0; i <= gate.length; i++) {
+			gate[i] = second;
+		}
 
-		if (count > 0) {
-			gate[column] = second;
+		gate[column] = second;
 		
-			if (gate[column] && tweetHandler[0]) {	
+		if (gate[column] === second && tweetHandler[0]) {	
 
-				//send the next tweet from the array
-				socket.emit('tweets', tweetHandler[0] + " *** ");
+			//send the next tweet from the array
+			socket.emit('tweets', tweetHandler[0] + " *** ");
 
-				//then remove it
-				tweetHandler.splice(0, 1);
+			//then remove it
+			tweetHandler.splice(0, 1);
 
-				gate[column] = !second;
-			}
+			gate[column] = !second;
 		}
 	});
 
